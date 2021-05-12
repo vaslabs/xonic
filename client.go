@@ -2,11 +2,11 @@ package main
 
 import (
 	"fmt"
+	"time"
 
 	evdev "github.com/gvalkov/golang-evdev"
 	"github.com/vaslabs/codecs"
 )
-
 
 func user_output(devices []*evdev.InputDevice) {
 	for i := 0; i < len(devices); i++ {
@@ -49,14 +49,28 @@ func main() {
 	fmt.Printf("%v\n", codecs.Decode_Device(codecs.Encode_Device(devices[selected_device])))
 	device := devices[selected_device]
 
-	event, _ := device.ReadOne()
-	
-	fmt.Println(event)
-	encoded_event := codecs.Encode_Input_Event(event) 
-	fmt.Println(encoded_event)
+	started := time.Now().Unix()
+	events, err := device.Read()
+	total_events := int64(0)
 
-	decoded_event := codecs.Decode_Input_Event(encoded_event)
-	fmt.Println(decoded_event)
+	// 400ops ~ 9Kbps
+	for err == nil {
+		// for i := range events {
+		// 	event := &events[i]
+		// 	// fmt.Println(event)
+		// 	// encoded_event := codecs.Encode_Input_Event(event)
+		// 	// fmt.Println(encoded_event)
 
+		// 	// decoded_event := codecs.Decode_Input_Event(encoded_event)
+		// 	// fmt.Println(decoded_event)
+		// }
+		total_events += int64(len(events))
+		if total_events%1000 == 0 {
+			checkpoint := time.Now().Unix()
+			time_diff := checkpoint - started
+			fmt.Printf("Processed %d\n, %d ops", total_events, (total_events / time_diff))
+		}
+		events, err = device.Read()
+	}
 
 }
