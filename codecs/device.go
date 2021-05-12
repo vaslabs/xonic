@@ -3,6 +3,8 @@ package codecs
 import (
 	"bytes"
 	"encoding/binary"
+	"fmt"
+	"unsafe"
 
 	evdev "github.com/gvalkov/golang-evdev"
 )
@@ -166,4 +168,33 @@ func calculate_size(multi_map map[int][]int) (uint64, uint64) {
 	total_size := 8 + arrays*8 + uint64(elements_size)*8 + arrays*8
 	//each key has a value and then the size of the array it points to + the size of all integers in the array
 	return keys, total_size
+}
+
+
+
+func Encode_Input_Event(event *evdev.InputEvent) []byte {
+	var eventsize = int(unsafe.Sizeof(evdev.InputEvent{}))
+	buffer := make([]byte, eventsize)
+
+	b := bytes.NewBuffer(buffer)
+
+	err := binary.Write(b, binary.LittleEndian, event)
+	if (err != nil) {
+		fmt.Printf("Error: %s", err.Error())
+	}
+	expected_size := eventsize
+	all_bytes := b.Bytes()
+	return all_bytes[len(all_bytes) - expected_size:]
+}
+
+func Decode_Input_Event(encoded []byte) *evdev.InputEvent {
+
+	b := bytes.NewBuffer(encoded)
+	event := evdev.InputEvent{}
+
+	err := binary.Read(b, binary.LittleEndian, &event)
+	if (err != nil) {
+		fmt.Printf("Error: %s", err.Error())
+	}
+	return &event
 }

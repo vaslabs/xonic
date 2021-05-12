@@ -4,7 +4,9 @@ import (
 	"fmt"
 
 	evdev "github.com/gvalkov/golang-evdev"
+	"github.com/vaslabs/codecs"
 )
+
 
 func user_output(devices []*evdev.InputDevice) {
 	for i := 0; i < len(devices); i++ {
@@ -44,5 +46,17 @@ func main() {
 
 	fmt.Printf("Selected %d\n", selected_device)
 	fmt.Println("======================")
-	fmt.Printf("%v\n", devices[selected_device])
+	fmt.Printf("%v\n", codecs.Decode_Device(codecs.Encode_Device(devices[selected_device])))
+	device := devices[selected_device]
+
+	event, _ := device.ReadOne()
+	
+	fmt.Println(event)
+	encoded_event := codecs.Encode_Input_Event(event) 
+	fmt.Println(encoded_event)
+
+	decoded_event := codecs.Decode_Input_Event(encoded_event)
+	fmt.Println(decoded_event)
+
+
 }
