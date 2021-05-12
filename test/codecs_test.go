@@ -7,7 +7,7 @@ import (
 )
 
 
-func Test_decoding_inverse_of_encoding(t *testing.T) {
+func Test_capabilities_decoding_inverse_of_encoding(t *testing.T) {
 	input := map[int][]int{1:{1,2,3}, 2:{2,3,4}}
 	size, encoded := codecs.Encode_Capabilities(input)
 	expected_size := 4 + 8 + 2*8 + 8*3 + 2*8 + 8*3
@@ -26,4 +26,21 @@ func Test_decoding_inverse_of_encoding(t *testing.T) {
 	}
 
 
+}
+
+func Test_string_decoding_inverse_of_encoding(t *testing.T) {
+	input := "Hello, world"
+	magic := uint32(0x1234)
+	encoded := codecs.Encode_Identifieable_String(magic, input)
+	
+	dmagic, decoded := codecs.Decode_Identifieable_String(encoded)
+
+	if (dmagic != magic) {
+		t.Errorf("Magic value mismatch: %d != %d", magic, dmagic)
+	}
+
+	if (input != decoded) {
+		t.Errorf("%v\n", encoded)
+		t.Errorf("Codec inverse failure: %s != %s", input, decoded)
+	}
 }
