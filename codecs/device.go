@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/binary"
 
+	evdev "github.com/gvalkov/golang-evdev"
 )
 
 const (
@@ -12,6 +13,31 @@ const (
 	VENDOR uint32 = 0xFE01
 	PRODUCT uint32 = 0xDAC7
 )
+
+//do capabilities last to avoid messy logic
+func Encode_Device(device *evdev.InputDevice) []byte {
+	capabilities := device.CapabilitiesFlat
+	name := device.Name
+	vendor := device.Vendor
+	product := device.Product
+
+	_, capabilities_enc := Encode_Capabilities(capabilities)
+	name_enc := Encode_Identifiable_String(NAME_STRING, name)
+	vendor_enc := Encode_Identifiable_uint16(VENDOR, vendor)
+	product_enc := Encode_Identifiable_uint16(PRODUCT, product)
+
+	return append(append(append(product_enc, vendor_enc...), name_enc...), capabilities_enc...)
+}
+
+func Decode_Device(encoded [] byte) *evdev.InputDevice {
+	_, product := Decode_Identifiable_uint16(encoded[0:6])
+	_, vendor := Decode_Identifiable_uint16(encoded[6:12])
+	_, name := Decode_Identifiable_String(encoded[12:])
+	skip := 12 + len(name) + 4 + 4
+	capabilities := Decode_Capabilities(encoded[skip:])
+
+	return &evdev.InputDevice{Name: name, Vendor: vendor, Product: product, CapabilitiesFlat: capabilities}
+}
 
 /*
  F L A G 
