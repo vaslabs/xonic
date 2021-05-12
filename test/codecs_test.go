@@ -31,9 +31,9 @@ func Test_capabilities_decoding_inverse_of_encoding(t *testing.T) {
 func Test_string_decoding_inverse_of_encoding(t *testing.T) {
 	input := "Hello, world"
 	magic := uint32(0x1234)
-	encoded := codecs.Encode_Identifieable_String(magic, input)
+	encoded := codecs.Encode_Identifiable_String(magic, input)
 	
-	dmagic, decoded := codecs.Decode_Identifieable_String(encoded)
+	dmagic, decoded := codecs.Decode_Identifiable_String(encoded)
 
 	if (dmagic != magic) {
 		t.Errorf("Magic value mismatch: %d != %d", magic, dmagic)
@@ -42,5 +42,23 @@ func Test_string_decoding_inverse_of_encoding(t *testing.T) {
 	if (input != decoded) {
 		t.Errorf("%v\n", encoded)
 		t.Errorf("Codec inverse failure: %s != %s", input, decoded)
+	}
+}
+
+func Test_uint16_decoding_inverse_of_encoding(t *testing.T) {
+	input := uint16(5432)
+	magic := uint32(0x65AA)
+
+	encoded := codecs.Encode_Identifiable_uint16(magic, input)
+
+	dmagic, decoded := codecs.Decode_Identifiable_uint16(encoded)
+
+	if (dmagic != magic) {
+		t.Errorf("Magic value mismatch: %d != %d", magic, dmagic)
+	}
+
+	if (input != decoded) {
+		t.Errorf("%v\n", encoded)
+		t.Errorf("Codec inverse failure: %d != %d", input, decoded)
 	}
 }

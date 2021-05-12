@@ -9,6 +9,8 @@ import (
 const (
 	CAPABILITIES_FLAG uint32 = 0xCABE
 	NAME_STRING uint32 = 0x5A4E
+	VENDOR uint32 = 0xFE01
+	PRODUCT uint32 = 0xDAC7
 )
 
 /*
@@ -32,7 +34,7 @@ func Decode_Capabilities(encoded []byte) map[int][]int  {
 /*
 magic for string (4 bytes), size of string (4 bytes), string bytes
 */
-func Encode_Identifieable_String(magic uint32, value string) []byte {
+func Encode_Identifiable_String(magic uint32, value string) []byte {
 	total_size := 4 + 4 + len(value)
 	store := bytes.NewBuffer(make([]byte, total_size))
 
@@ -46,12 +48,25 @@ func Encode_Identifieable_String(magic uint32, value string) []byte {
 	return byte_buffer[len(byte_buffer) - total_size:]
 }
 
-func Decode_Identifieable_String(encoded []byte) (uint32, string) {
+func Decode_Identifiable_String(encoded []byte) (uint32, string) {
 	flag := binary.BigEndian.Uint32(encoded[0:4])
 
 	size_of_string := binary.BigEndian.Uint32(encoded[4:8])
 
 	return flag, string(encoded[8:8+size_of_string])
+}
+
+func Encode_Identifiable_uint16(magic uint32, value uint16) []byte {
+	store := make([]byte, 6)
+	binary.BigEndian.PutUint32(store[0:4], magic)
+	binary.BigEndian.PutUint16(store[4:6], value)
+	return store
+}
+
+func Decode_Identifiable_uint16(encoded []byte) (uint32, uint16) {
+	magic := binary.BigEndian.Uint32(encoded[0:4])
+	value := binary.BigEndian.Uint16(encoded[4:6])
+	return magic, value
 }
 
 func read_key(v []byte) uint64 {
