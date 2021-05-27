@@ -53,7 +53,7 @@ func (client *Client) Stream_Gamepad(inputDevice *evdev.InputDevice) {
 	device_info := codecs.Encode_Device(inputDevice)
 	device_info_payload := b64.StdEncoding.EncodeToString(device_info)
 
-	client.send(&protocol.GamepadMessage{Command: "RegisterDevice", Payload: device_info_payload})
+	client.send(&protocol.GamepadMessage{Command: protocol.RegisterDevice, Payload: device_info_payload})
 
 	client.await_registration(inputDevice)
 }
@@ -76,7 +76,7 @@ func (client *Client) process_messages() {
 			client.stream_gamepad_input()
 		} else if gamepad_message.Command == protocol.ListDevices {
 			client.send(&protocol.GamepadMessage{Command: "SelectDevice", Payload: display(cmd.List_Input_Devices())})
-		} else if gamepad_message.Command == "SelectedDevice" {
+		} else if gamepad_message.Command == protocol.SelectedDevice {
 			selected_device, err := cmd.Find_Device(gamepad_message.Payload)
 			if err != nil {
 				client.Stream_Gamepad(selected_device)

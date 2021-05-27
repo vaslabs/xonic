@@ -2,3 +2,5 @@ github.com/gorilla/websocket v1.4.2 h1:+/TMaTYc4QFitKJxsQ7Yye35DkWvkdLcvGKqM+x0U
 github.com/gorilla/websocket v1.4.2/go.mod h1:YR8l580nyteQvAITg2hZ9XVh4b55+EU/adAjf1fMHhE=
 github.com/gvalkov/golang-evdev v0.0.0-20191114124502-287e62b94bcb h1:WHSAxLz3P5t4DKukfJ5wu7+aMyVkuTNSbCiAjVS92sM=
 github.com/gvalkov/golang-evdev v0.0.0-20191114124502-287e62b94bcb/go.mod h1:SAzVFKCRezozJTGavF3GX8MBUruETCqzivVLYiywouA=
+github.com/ynsta/uinput v0.0.0-20170902160421-4d1af569ef38 h1:nh6PV99BgIfjCuslHHuvqJm3YvZBug0gKY+bQM/oHG8=
+github.com/ynsta/uinput v0.0.0-20170902160421-4d1af569ef38/go.mod h1:bXuuPzDmUGbEYbS9/IgTo64xLB5ZyISUDG02SkTZp04=

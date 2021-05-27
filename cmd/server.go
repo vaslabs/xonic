@@ -8,7 +8,14 @@ import (
 
 func List_Input_Devices() []*evdev.InputDevice {
 	devices, err := evdev.ListInputDevices("/dev/input/*")
+	fmt.Printf("Devices %v\n", devices)
+	for i := 0; i < len(devices); i++ {
+		device := devices[i]
+		fmt.Printf("%v\n", device.Capabilities)
+		fmt.Printf("%v\n", device.CapabilitiesFlat)
 
+
+	}
 	if err == nil {
 		return devices
 	} else {

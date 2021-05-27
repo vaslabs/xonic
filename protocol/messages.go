@@ -8,4 +8,6 @@ type GamepadMessage struct {
 
 const (
 	ListDevices = "ListDevices"
+	SelectedDevice = "SelectedDevice"
+	RegisterDevice = "RegisterDevice"
 )
