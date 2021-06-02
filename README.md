@@ -1,6 +1,15 @@
 # xonic
 WIP: Stream gamepads from one linux box to another
 
+## Note
+I have to revisit the scope of this project because this is possible with two lines of bash given ds4drv
+
+```sh
+ds4drv --emulate-xpad-wireless --next-controller --hidraw
+ssh username@gamepadhost cat /dev/input/event20 >/dev/input/event26
+```
+
+
 
 ## Goals
 
@@ -10,3 +19,4 @@ WIP: Stream gamepads from one linux box to another
 
 ## Credits
 Based on work from https://yingtongli.me/blog/2019/12/01/input-over-ssh-2.html 
+
