@@ -1,6 +1,7 @@
 # xonic
 WIP: Stream gamepads from one linux box to another
 
+
 ## Note
 I have to revisit the scope of this project because this is possible with two lines of bash given ds4drv
 
@@ -10,8 +11,10 @@ ssh username@gamepadhost cat /dev/input/event20 >/dev/input/event26
 ```
 
 
+## Revisited goals
+A netcat proxy with authentication for streaming gamepad input events
 
-## Goals
+## Goals (deprecated)
 
 1. Installation candidates for client + server
 2. Configureable transport layer over (ssh first)
