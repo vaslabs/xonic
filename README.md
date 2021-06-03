@@ -6,7 +6,7 @@ WIP: Stream gamepads from one linux box to another
 I have to revisit the scope of this project because this is possible with two lines of bash given ds4drv
 
 ```sh
-ds4drv --emulate-xpad-wireless --next-controller --hidraw
+ds4drv --emulate-xpad-wireless --next-controller --emulate-xpad-wireless --hidraw
 ssh username@gamepadhost cat /dev/input/event20 >/dev/input/event26
 ```
 
